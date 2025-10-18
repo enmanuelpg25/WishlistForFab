@@ -1,68 +1,91 @@
+/***************************************************
+ 
+    Wishlist for Fab - CSS
+    Fixed version with text-based hearts for reliability
+    
+****************************************************/
+
+/* Color Variables */
 body {
-	--colors-fill-default-wishlist: #ff61ea;
-	--colors-fill-active-wishlist: #ff94f1;
+    --colors-fill-default-wishlist: #ff61ea;
+    --colors-fill-active-wishlist: #ff94f1;
 }
 
+/* Main wishlist tab state */
 body[wishlist-tab-state="open"] {
-	overflow: hidden;
+    overflow: hidden;
 }
 
+/* Wishlist button in sidebar (on individual product pages) */
 #button_wishlist[wishlist-state="true"] {
-  --_Button_color: var(--colors-text-on-accent);
-  --_Button_backgroundColor: var(--colors-fill-default-wishlist);
-  --_Button--hover_backgroundColor: var(--colors-fill-active-wishlist);
-  --_Button--active_backgroundColor: var(--colors-fill-default-wishlist);
-  --_Button--disabled_backgroundColor: var(--colors-fill-disabled-primary);
+    --_Button_color: var(--colors-text-on-accent);
+    --_Button_backgroundColor: var(--colors-fill-default-wishlist);
+    --_Button--hover_backgroundColor: var(--colors-fill-active-wishlist);
+    --_Button--active_backgroundColor: var(--colors-fill-default-wishlist);
+    --_Button--disabled_backgroundColor: var(--colors-fill-disabled-primary);
 }
 
 #button_wishlist[wishlist-state="true"] span.add,
 #button_wishlist:not([wishlist-state="true"]) span.remove {
-	display: none;
+    display: none;
 }
 
-body[wishlist-tab-state="open"] #megamenu_wishlistToggle .fabicon-heart,
-body:not([wishlist-tab-state="open"]) #megamenu_wishlistToggle .fabicon-heart-filled,
-[wishlist-id][wishlist-state="true"] .fabicon-heart,
-[wishlist-id]:not([wishlist-state="true"]) .fabicon-heart-filled {
-	display: none;
+/* Navigation heart icon - text based */
+#megamenu_wishlistToggle {
+    position: relative;
+    display: inline-block !important;
+    visibility: visible !important;
 }
 
-#megamenu_wishlistToggle .fabicon-heart-filled,
-[wishlist-id] .fabicon-heart-filled {
-	color: var(--colors-fill-default-wishlist);
+#megamenu_wishlistToggle .wishlist-heart-icon::before {
+    content: "♡";
+    font-size: 20px;
+    color: currentColor;
+    transition: color 0.2s ease;
 }
 
+body[wishlist-tab-state="open"] #megamenu_wishlistToggle .wishlist-heart-icon::before {
+    content: "♥";
+    color: var(--colors-fill-default-wishlist);
+}
+
+#megamenu_wishlistToggle:hover .wishlist-heart-icon::before {
+    color: var(--colors-fill-active-wishlist);
+}
+
+/* Wishlist tab panel */
 #tab_wishlist {
-  height: 0;
-  width: 100%;
-  background: var(--colors-background-elevated-low-default);
-	opacity: 0;
-	top: 72px;
-	top: var(--DefaultLayout-header_size, 72px);
-	position: fixed;
-  z-index: 10;
-  pointer-events: none;
-  transition: opacity .35s ease, min-height 0s ease .35s;
-  overflow: auto;
+    height: 0;
+    width: 100%;
+    background: var(--colors-background-elevated-low-default);
+    opacity: 0;
+    top: 72px;
+    top: var(--DefaultLayout-header_size, 72px);
+    position: fixed;
+    z-index: 10;
+    pointer-events: none;
+    transition: opacity .35s ease, min-height 0s ease .35s;
+    overflow: auto;
 }
 
 #tab_wishlist .title-sub { 
-	margin-left: 5px;
+    margin-left: 5px;
 }
 
 body[wishlist-tab-state="open"] #tab_wishlist {
-	opacity: 1;
-  min-height: calc(100vh - 72px);
-  min-height: calc(100vh - var(--DefaultLayout-header_size, 72px));
-  transition: opacity .35s ease, min-height 0s ease;
-  pointer-events: all;
+    opacity: 1;
+    min-height: calc(100vh - 72px);
+    min-height: calc(100vh - var(--DefaultLayout-header_size, 72px));
+    transition: opacity .35s ease, min-height 0s ease;
+    pointer-events: all;
 }
 
 #tab_wishlist:not([wishlist-count="0"]) .wishlist-message-empty,
 #tab_wishlist:not([wishlist-filter-result="0"]) .wishlist-message-filter-zero {
-	display: none;
+    display: none;
 }
 
+/* Filter functionality */
 #tab_wishlist[wishlist-filter-onsale="true"] .wishlist-listing:not(.wishlist-onsale),
 #tab_wishlist[wishlist-filter="2d-asset"] .wishlist-listing:not([listing-category="2d-asset"]),
 #tab_wishlist[wishlist-filter="3d-model"] .wishlist-listing:not([listing-category="3d-model"]),
@@ -84,31 +107,124 @@ body[wishlist-tab-state="open"] #tab_wishlist {
     display: none; 
 }
 
+/* Filter and export buttons */
 #tab_wishlist_export:hover,
 .wishlist-filter-button:hover { 
     background: var(--colors-fill-secondary-elevated-default); 
 }
+
 #tab_wishlist_export[aria-toggle="true"],
 .wishlist-filter-button[aria-toggle="true"] { 
     background: var(--colors-fill-default-wishlist); 
 }
+
 #tab_wishlist_export[aria-toggle="true"]:hover,
 .wishlist-filter-button[aria-toggle="true"]:hover { 
     background: var(--colors-fill-active-wishlist); 
 }
 
-#wishlist_import, #wishlist_export {
+#wishlist_export {
     height: 300px; 
+    font-family: monospace;
+    font-size: 12px;
 }
 
-#wishlist_import[aria-hidden="true"], #wishlist_export[aria-hidden="true"] {
-	  display: none;
+#wishlist_export[aria-hidden="true"] {
+    display: none;
 }
 
+/* Text formatting */
 .wishlist-capitalize {
     text-transform: capitalize;
 }
 
 .wishlist-strikeout {
-    text-decoration: strikeout;
+    text-decoration: line-through;
+}
+
+/* Heart button on asset cards */
+.wishlist-card-button {
+    position: absolute !important;
+    bottom: 8px !important;
+    right: 8px !important;
+    z-index: 5 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 36px !important;
+    height: 36px !important;
+    border-radius: 50% !important;
+    background: rgba(0, 0, 0, 0.7) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+    opacity: 0.9 !important;
+    visibility: visible !important;
+}
+
+.wishlist-card-button:hover {
+    background: rgba(0, 0, 0, 0.85) !important;
+    transform: scale(1.1) !important;
+    opacity: 1 !important;
+}
+
+/* Heart icon using text */
+.wishlist-heart-toggle::before {
+    content: "♡" !important;
+    font-size: 22px !important;
+    color: white !important;
+    line-height: 1 !important;
+    display: block !important;
+}
+
+/* Filled heart when in wishlist */
+[wishlist-state="true"] .wishlist-heart-toggle::before,
+.wishlist-card-button.in-wishlist-page .wishlist-heart-toggle::before {
+    content: "♥" !important;
+    color: var(--colors-fill-default-wishlist) !important;
+}
+
+/* Ensure thumbnails are positioned correctly */
+.fabkit-Thumbnail--16\/9 {
+    position: relative !important;
+}
+
+/* Make the listing items in wishlist page positioned */
+.wishlist-listing .fabkit-Thumbnail--16\/9 {
+    position: relative !important;
+}
+
+/* Hover effects for better UX */
+.fabkit-Thumbnail--16\/9:hover .wishlist-card-button {
+    opacity: 1 !important;
+}
+
+/* Close button style */
+#tab_wishlist_close .fabkit-Button-label {
+    font-size: 20px !important;
+    line-height: 1 !important;
+}
+
+/* Animation for heart toggle */
+@keyframes heartPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+.wishlist-card-button:active {
+    animation: heartPulse 0.3s ease-in-out;
+}
+
+/* Ensure visibility on dark backgrounds */
+.wishlist-card-button {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Override any conflicting styles */
+.wishlist-card-button * {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
 }
